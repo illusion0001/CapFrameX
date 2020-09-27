@@ -72,6 +72,7 @@ namespace CapFrameX.Updater
                         Console.WriteLine($"Killing Process {proc.ProcessName}");
                         proc.Kill();
                     }
+                    await Task.Delay(3000);
                     using (ZipArchive archive = ZipFile.Open(downloadPath, ZipArchiveMode.Read))
                     {
                         Console.WriteLine($"Extracting to {executingDirectory}");
