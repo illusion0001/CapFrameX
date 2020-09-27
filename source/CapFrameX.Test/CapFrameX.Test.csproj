@@ -122,9 +122,9 @@
       <Project>{b1b0e5f1-942a-476c-bea4-8b9ffbca04c6}</Project>
       <Name>CapFrameX.Sensor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CapFrameX.Updater\CapFrameX.Updater.csproj">
+    <ProjectReference Include="..\CapFrameX.UpdateCheck\CapFrameX.UpdateCheck.csproj">
       <Project>{5d12aa37-cc30-4476-94ad-11c15dc65518}</Project>
-      <Name>CapFrameX.Updater</Name>
+      <Name>CapFrameX.UpdateCheck</Name>
     </ProjectReference>
     <ProjectReference Include="..\CapFrameX\CapFrameX.csproj">
       <Project>{aaa73d26-5cd6-4066-b84c-5bd34057b346}</Project>

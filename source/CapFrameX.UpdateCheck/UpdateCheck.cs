@@ -3,7 +3,7 @@ using CapFrameX.Contracts.UpdateCheck;
 using System;
 using System.Threading.Tasks;
 
-namespace CapFrameX.Updater
+namespace CapFrameX.UpdateCheck
 {
     public class UpdateCheck: IUpdateCheck
 	{

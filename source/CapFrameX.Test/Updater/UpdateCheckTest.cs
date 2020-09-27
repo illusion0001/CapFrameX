@@ -1,6 +1,6 @@
 ﻿using CapFrameX.Contracts.Data;
 using CapFrameX.Data;
-using CapFrameX.Updater;
+using CapFrameX.UpdateCheck;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -19,7 +19,7 @@ namespace CapFrameX.Test.Updater
 			var appVersionProviderMock = new Mock<IAppVersionProvider>();
 			appVersionProviderMock.Setup(m => m.GetAppVersion()).Returns(new Version(1, 3, 0));
 
-			var updateChecker = new UpdateCheck(appVersionProviderMock.Object, new WebVersionProvider(url));
+			var updateChecker = new UpdateCheck.UpdateCheck(appVersionProviderMock.Object, new WebVersionProvider(url));
 
 			var (result, version) = await updateChecker.IsUpdateAvailable();
 			Assert.IsTrue(result);
@@ -33,7 +33,7 @@ namespace CapFrameX.Test.Updater
 			var appVersionProviderMock = new Mock<IAppVersionProvider>();
 			appVersionProviderMock.Setup(m => m.GetAppVersion()).Returns(new Version(1, 4, 0));
 
-			var updateChecker = new UpdateCheck(appVersionProviderMock.Object, new WebVersionProvider(url));
+			var updateChecker = new UpdateCheck.UpdateCheck(appVersionProviderMock.Object, new WebVersionProvider(url));
 			var (result, version) = await updateChecker.IsUpdateAvailable();
 			Assert.IsFalse(result);
 		}

@@ -22,7 +22,7 @@ using Microsoft.Extensions.Logging;
 using CapFrameX.Extensions;
 using System.IO;
 using CapFrameX.Contracts.UpdateCheck;
-using CapFrameX.Updater;
+using CapFrameX.UpdateCheck;
 using CapFrameX.EventAggregation.Messages;
 using CapFrameX.Contracts.Sensor;
 using CapFrameX.Sensor;
@@ -92,7 +92,7 @@ namespace CapFrameX
 			Container.Register<ISystemInfo, SystemInfo>(Reuse.Singleton);
 			Container.Register<IAppVersionProvider, AppVersionProvider>(Reuse.Singleton);
 			Container.RegisterInstance<IWebVersionProvider>(new WebVersionProvider(), Reuse.Singleton);
-			Container.Register<IUpdateCheck, UpdateCheck>(Reuse.Singleton);
+			Container.Register<IUpdateCheck, UpdateCheck.UpdateCheck>(Reuse.Singleton);
 			Container.Register<LoginManager>(Reuse.Singleton);
 			Container.Register<ICloudManager, CloudManager>(Reuse.Singleton);
 			Container.Register<LoginWindow>(Reuse.Transient);

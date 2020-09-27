@@ -246,9 +246,9 @@
       <Project>{80a26f08-6ae5-472d-bb13-b6fb9a37fdcb}</Project>
       <Name>CapFrameX.Statistics.PlotBuilder</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CapFrameX.Updater\CapFrameX.Updater.csproj">
+    <ProjectReference Include="..\CapFrameX.UpdateCheck\CapFrameX.UpdateCheck.csproj">
       <Project>{5D12AA37-CC30-4476-94AD-11C15DC65518}</Project>
-      <Name>CapFrameX.Updater</Name>
+      <Name>CapFrameX.UpdateCheck</Name>
     </ProjectReference>
     <ProjectReference Include="..\CapFrameX.Webservice.Data\CapFrameX.Webservice.Data.csproj">
       <Project>{69D694A6-B029-4FE8-8429-F4E70DB8B5E1}</Project>
