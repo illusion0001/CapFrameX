@@ -2,7 +2,7 @@
 {
 	public interface IShell
 	{
-		System.Windows.Controls.ContentControl GlobalScreenshotArea { get; }
+		dynamic GlobalScreenshotArea { get; }
 
 		bool IsGpuAccelerationActive { get; set; }
 	}

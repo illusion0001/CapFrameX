@@ -245,7 +245,7 @@ namespace OpenHardwareMonitor.Hardware
             {
                 try
                 {
-                    isaBusMutex = Mutex.OpenExisting(isaMutexName, MutexRights.Synchronize);
+                    Mutex.TryOpenExisting(isaMutexName, out isaBusMutex);
                 }
                 catch { }
             }
@@ -259,7 +259,7 @@ namespace OpenHardwareMonitor.Hardware
             {
                 try
                 {
-                    pciBusMutex = Mutex.OpenExisting(pciMutexName, MutexRights.Synchronize);
+                    Mutex.TryOpenExisting(pciMutexName, out pciBusMutex);
                 }
                 catch { }
             }

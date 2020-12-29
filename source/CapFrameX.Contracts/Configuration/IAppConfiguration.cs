@@ -1,5 +1,4 @@
 ﻿using CapFrameX.Statistics.NetStandard.Contracts;
-using System.Windows.Forms;
 
 namespace CapFrameX.Contracts.Configuration
 {
