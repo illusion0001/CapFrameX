@@ -21,13 +21,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="MouseKeyHook" Version="5.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CapFrameX.Contracts\CapFrameX.Contracts.csproj" />
     <ProjectReference Include="..\CapFrameX.Statistics.NetStandard\CapFrameX.Statistics.NetStandard.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MouseKeyHook" Version="5.6.0" />
   </ItemGroup>
 </Project>

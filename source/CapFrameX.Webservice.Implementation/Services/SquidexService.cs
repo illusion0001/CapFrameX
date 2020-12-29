@@ -64,16 +64,16 @@ namespace CapFrameX.Webservice.Implementation.Services
 		{
 			var SESSIONFOLDERID = Guid.Parse("94c0cfae-19fc-4c64-be67-13683c04fe0a");
 			var client = _squidexClientManager.CreateAssetsClient();
-			var uploadedAsset = await client.PostAssetAsync(_squidexOptions.AppName, new FileParameter(new MemoryStream(data), fileName, "application/json"), SESSIONFOLDERID);
-			return uploadedAsset.Id;
+			var uploadedAsset = await client.PostAssetAsync(app: _squidexOptions.AppName, file: new FileParameter(new MemoryStream(data), fileName, "application/json"), parentId: SESSIONFOLDERID.ToString());
+			return new Guid(uploadedAsset.Id);
 		}
 
 		public async Task<Guid> UploadCrashlog(byte[] data, string filename)
 		{
 			var SESSIONFOLDERID = Guid.Parse("df35dedd-94e1-4fbd-a0a4-fc1a965ba0a5");
 			var client = _squidexClientManager.CreateAssetsClient();
-			var uploadedCrashlog = await client.PostAssetAsync(_squidexOptions.AppName, new FileParameter(new MemoryStream(data), filename, "application/json"), SESSIONFOLDERID);
-			return uploadedCrashlog.Id;
+			var uploadedCrashlog = await client.PostAssetAsync(app: _squidexOptions.AppName, file: new FileParameter(new MemoryStream(data), filename, "application/json"), parentId: SESSIONFOLDERID.ToString());
+			return new Guid(uploadedCrashlog.Id);
 		}
 
 		public async Task<(string, byte[])> DownloadAsset(Guid id)
@@ -115,7 +115,7 @@ namespace CapFrameX.Webservice.Implementation.Services
 				try
 				{
 					var result = await client.CreateAsync(sessionCollection, true);
-					return result.Id;
+					return new Guid(result.Id);
 				} catch(Exception)
 				{
 					throw;
@@ -153,7 +153,7 @@ namespace CapFrameX.Webservice.Implementation.Services
 				{
 					throw new UnauthorizedAccessException("You cannot delete this session.");
 				}
-				await client.DeleteAsync(id);
+				await client.DeleteAsync(id.ToString());
 			}
 		}
 	}
