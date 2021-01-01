@@ -24,6 +24,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
