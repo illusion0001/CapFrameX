@@ -17,14 +17,14 @@ namespace CapFrameX.Remote
 
         public static WebServer CreateWebServer(IContainer iocContainer, string hostnameAndPort)
         {
-            var server = new WebServer(hostnameAndPort)
-                .WithCors()
-                .WithWebApi("/api", m =>
-                {
-                    m.WithController(() => new CaptureController(iocContainer.Resolve<CaptureManager>()));
-                    m.WithController(() => new VersionController(iocContainer.Resolve<IAppVersionProvider>()));
-                })
-                .WithModule(new ActionModule("/", HttpVerbs.Any, ctx => ctx.SendDataAsync(new { Message = "Error" })));
+            var server = new WebServer(hostnameAndPort);
+                //.WithCors()
+                //.WithWebApi("/api", m =>
+                //{
+                //    m.WithController(() => new CaptureController(iocContainer.Resolve<CaptureManager>()));
+                //    m.WithController(() => new VersionController(iocContainer.Resolve<IAppVersionProvider>()));
+                //})
+                //.WithModule(new ActionModule("/", HttpVerbs.Any, ctx => ctx.SendDataAsync(new { Message = "Error" })));
 
             // Listen for state changes.
             server.StateChanged += (s, e) => System.Console.WriteLine($"WebServer New State - {e.NewState}");
