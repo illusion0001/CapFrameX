@@ -48,7 +48,7 @@
     <PackageReference Include="CommonServiceLocator" Version="2.0.5" />
     <PackageReference Include="ControlzEx" Version="4.4.0" />
     <PackageReference Include="Cyotek.Drawing.BitmapFont" Version="2.0.1" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.4.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.1" />
     <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
     <PackageReference Include="Jot" Version="2.0.3" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
