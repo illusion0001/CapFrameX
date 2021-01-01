@@ -31,21 +31,22 @@ using CapFrameX.Statistics.NetStandard.Contracts;
 using CapFrameX.Contracts.RTSS;
 using CapFrameX.RTSSIntegration;
 using OpenHardwareMonitor.Hardware;
+using Prism.Ioc;
 
 namespace CapFrameX
 {
-	public class Bootstrapper : DryIocBootstrapper
+	public class Bootstrapper : PrismBootstrapper
 	{
 		protected override DependencyObject CreateShell()
 		{
 			var shell = Container.Resolve<Shell>();
-			Container.UseInstance<IShell>(shell);
+			InitializeShell();
+			ConfigureModuleCatalog();
 			return shell;
 		}
 
-		protected override void InitializeShell()
+		private void InitializeShell()
 		{
-			base.InitializeShell();
 			LogAppInfo();
 
 			// get config
@@ -66,47 +67,45 @@ namespace CapFrameX
 				Application.Current.MainWindow.Hide();
 		}
 
-		protected override void ConfigureContainer()
+		protected override void RegisterTypes(IContainerRegistry containerRegistry)
 		{
-			base.ConfigureContainer();
-
 			// Vertical components
-			Container.Register<IEventAggregator, EventAggregator>(Reuse.Singleton, null, null, IfAlreadyRegistered.Replace, "EventAggregator");
-			Container.Register<IAppConfiguration, CapFrameXConfiguration>(Reuse.Singleton);
-			Container.RegisterInstance<IFrametimeStatisticProviderOptions>(Container.Resolve<CapFrameXConfiguration>());
-			Container.ConfigureSerilogILogger(Log.Logger);
+			containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
+			containerRegistry.Register<IAppConfiguration, CapFrameXConfiguration>();
+			containerRegistry.RegisterInstance<IFrametimeStatisticProviderOptions>(Container.Resolve<CapFrameXConfiguration>());
+			containerRegistry.ConfigureSerilogILogger(Log.Logger);
 
 			// Prism
-			Container.Register<IRegionManager, RegionManager>(Reuse.Singleton, null, null, IfAlreadyRegistered.Replace, "RegionManager");
+			containerRegistry.Register<IRegionManager, RegionManager>();
 
 			// Core components
-			Container.Register<IRecordDirectoryObserver, RecordDirectoryObserver>(Reuse.Singleton);
-			Container.Register<IStatisticProvider, FrametimeStatisticProvider>(Reuse.Singleton);
-			Container.Register<IFrametimeAnalyzer, FrametimeAnalyzer>(Reuse.Singleton);
-			Container.Register<ICaptureService, PresentMonCaptureService>(Reuse.Singleton);
-			Container.Register<IRTSSService, RTSSService>(Reuse.Singleton);
-			Container.Register<IOverlayService, OverlayService>(Reuse.Singleton);
-			Container.Register<IOnlineMetricService, OnlineMetricService>(Reuse.Singleton);
-			Container.Register<ISensorService, SensorService>(Reuse.Singleton);
-			Container.Register<ISensorConfig, SensorConfig>(Reuse.Singleton);
-			Container.Register<IOverlayEntryProvider, OverlayEntryProvider>(Reuse.Singleton);
-			Container.Register<IRecordManager, RecordManager>(Reuse.Singleton);
-			Container.Register<ISystemInfo, SystemInfo>(Reuse.Singleton);
-			Container.Register<IAppVersionProvider, AppVersionProvider>(Reuse.Singleton);
-			Container.RegisterInstance<IWebVersionProvider>(new WebVersionProvider(), Reuse.Singleton);
-			Container.Register<IUpdateCheck, UpdateCheck>(Reuse.Singleton);
-			Container.Register<LoginManager>(Reuse.Singleton);
-			Container.Register<ICloudManager, CloudManager>(Reuse.Singleton);
-			Container.Register<LoginWindow>(Reuse.Transient);
-			Container.RegisterInstance(ProcessList.Create(
+			containerRegistry.RegisterSingleton<IRecordDirectoryObserver, RecordDirectoryObserver>();
+			containerRegistry.RegisterSingleton<IStatisticProvider, FrametimeStatisticProvider>();
+			containerRegistry.RegisterSingleton<IFrametimeAnalyzer, FrametimeAnalyzer>();
+			containerRegistry.RegisterSingleton<ICaptureService, PresentMonCaptureService>();
+			containerRegistry.RegisterSingleton<IRTSSService, RTSSService>();
+			containerRegistry.RegisterSingleton<IOverlayService, OverlayService>();
+			containerRegistry.RegisterSingleton<IOnlineMetricService, OnlineMetricService>();
+			containerRegistry.RegisterSingleton<ISensorService, SensorService>();
+			containerRegistry.RegisterSingleton<ISensorConfig, SensorConfig>();
+			containerRegistry.RegisterSingleton<IOverlayEntryProvider, OverlayEntryProvider>();
+			containerRegistry.RegisterSingleton<IRecordManager, RecordManager>();
+			containerRegistry.RegisterSingleton<ISystemInfo, SystemInfo>();
+			containerRegistry.RegisterSingleton<IAppVersionProvider, AppVersionProvider>();
+			containerRegistry.RegisterInstance<IWebVersionProvider>(new WebVersionProvider());
+			containerRegistry.RegisterSingleton<IUpdateCheck, UpdateCheck>();
+			containerRegistry.RegisterSingleton<LoginManager>();
+			containerRegistry.RegisterSingleton<ICloudManager, CloudManager>();
+			containerRegistry.Register<LoginWindow>();
+			containerRegistry.RegisterInstance(ProcessList.Create(
 				filename: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"CapFrameX\Resources\Processes.json"),
 				appConfiguration: Container.Resolve<IAppConfiguration>()));
-			Container.Register<SoundManager>(Reuse.Singleton);
+			containerRegistry.Register<SoundManager>();
 			Container.Resolve<IEventAggregator>().GetEvent<PubSubEvent<AppMessages.OpenLoginWindow>>().Subscribe(_ => {
 				var window = Container.Resolve<LoginWindow>();
 				window.Show();
 			});
-			Container.Register<CaptureManager>(Reuse.Singleton);
+			containerRegistry.Register<CaptureManager>();
 		}
 
 		/// <summary>
@@ -133,14 +132,12 @@ namespace CapFrameX
 				return t;
 			});
 
-			ViewModelLocationProvider.SetDefaultViewModelFactory(type => Container.Resolve(type, IfUnresolved.Throw));
+			ViewModelLocationProvider.SetDefaultViewModelFactory(type => Container.Resolve(type));
 		}
 
-		protected override void ConfigureModuleCatalog()
+		private void ConfigureModuleCatalog()
 		{
-			base.ConfigureModuleCatalog();
-
-			ModuleCatalog moduleCatalog = (ModuleCatalog)ModuleCatalog;
+			var moduleCatalog = CreateModuleCatalog();
 			moduleCatalog.AddModule(typeof(CapFrameXViewRegion));
 		}
 

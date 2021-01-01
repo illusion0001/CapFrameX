@@ -17,7 +17,7 @@ namespace CapFrameX
     /// </summary>
     public partial class Shell : Window, IShell
     {
-        public System.Windows.Controls.ContentControl GlobalScreenshotArea => ScreenshotArea;
+        public dynamic GlobalScreenshotArea => ScreenshotArea;
 
         public bool IsGpuAccelerationActive { get; set; } = true;
 

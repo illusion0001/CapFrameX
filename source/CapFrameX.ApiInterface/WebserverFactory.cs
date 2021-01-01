@@ -7,6 +7,7 @@ using DryIoc;
 using EmbedIO;
 using EmbedIO.Actions;
 using EmbedIO.WebApi;
+using Prism.Ioc;
 using Swan.Logging;
 using System.Reactive.Subjects;
 
@@ -15,7 +16,7 @@ namespace CapFrameX.Remote
     public static class WebserverFactory
     {
 
-        public static WebServer CreateWebServer(IContainer iocContainer, string hostnameAndPort)
+        public static WebServer CreateWebServer(IContainerRegistry iocContainer, string hostnameAndPort)
         {
             var server = new WebServer(hostnameAndPort);
                 //.WithCors()

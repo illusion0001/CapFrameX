@@ -34,11 +34,11 @@ namespace CapFrameX
 			SetupExceptionHandling();
 			base.OnStartup(e);
 			_bootstrapper = new Bootstrapper();
-			_bootstrapper.Run(true);
+			_bootstrapper.Run();
 
 
-			_webServer = WebserverFactory.CreateWebServer(_bootstrapper.Container, "http://localhost:1337");
-			_webServer.RunAsync();
+			//_webServer = WebserverFactory.CreateWebServer(_bootstrapper.Container, "http://localhost:1337");
+			//_webServer.RunAsync();
 		}
 
 		private void SetupExceptionHandling()
@@ -111,13 +111,13 @@ namespace CapFrameX
 		{
 			PresentMonCaptureService.TryKillPresentMon();
 
-			var overlayService = _bootstrapper.Container.Resolve(typeof(IOverlayService), true) as IOverlayService;
+			var overlayService = _bootstrapper.Container.Resolve(typeof(IOverlayService)) as IOverlayService;
 			overlayService?.IsOverlayActiveStream.OnNext(false);
 
-			var sensorService = _bootstrapper.Container.Resolve(typeof(ISensorService), true) as ISensorService;
+			var sensorService = _bootstrapper.Container.Resolve(typeof(ISensorService)) as ISensorService;
 			sensorService?.CloseOpenHardwareMonitor();
 
-			_webServer.Dispose();
+			//_webServer.Dispose();
 		}
 
 		private void Application_Startup(object sender, StartupEventArgs e)

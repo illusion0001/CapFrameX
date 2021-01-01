@@ -30,7 +30,7 @@
     <ProjectReference Include="..\CapFrameX.Data\CapFrameX.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DryIoc.dll" Version="2.12.10" />
+    <PackageReference Include="DryIoc.dll" Version="4.6.0" />
     <PackageReference Include="EmbedIO" Version="3.4.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

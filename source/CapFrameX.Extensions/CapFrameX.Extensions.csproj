@@ -28,13 +28,14 @@
     <ProjectReference Include="..\CapFrameX.Hotkey\CapFrameX.Hotkey.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DryIoc.dll" Version="2.12.10" />
+    <PackageReference Include="DryIoc.dll" Version="4.6.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.0" />
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
