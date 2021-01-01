@@ -7,3 +7,4 @@
 		bool IsGpuAccelerationActive { get; set; }
 	}
 }
+
