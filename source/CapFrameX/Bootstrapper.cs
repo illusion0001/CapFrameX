@@ -39,21 +39,23 @@ namespace CapFrameX
 	{
 		protected override DependencyObject CreateShell()
 		{
-			var shell = Container.Resolve<Shell>();
-			InitializeShell();
-			ConfigureModuleCatalog();
-			return shell;
+			this.Shell = Container.Resolve<Shell>();
+			InitializeShell(this.Shell);
+			return this.Shell;
 		}
 
-		private void InitializeShell()
+		protected override void InitializeShell(DependencyObject obj)
 		{
 			LogAppInfo();
+
+			if(!(obj is IShell shell))
+            {
+				throw new ArgumentException("Shell not Implementing IShell");
+            }
 
 			// get config
 			var config = Container.Resolve<CapFrameXConfiguration>();
 
-			// get Shell to set the hardware acceleration
-			var shell = Container.Resolve<IShell>();
 			shell.IsGpuAccelerationActive = config.IsGpuAccelerationActive;
 
 			Application.Current.MainWindow = (Window)Shell;
@@ -69,11 +71,12 @@ namespace CapFrameX
 
 		protected override void RegisterTypes(IContainerRegistry containerRegistry)
 		{
+			containerRegistry.RegisterInstance(typeof(IShell), this.Shell);
 			// Vertical components
 			containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
 			containerRegistry.Register<IAppConfiguration, CapFrameXConfiguration>();
 			containerRegistry.RegisterInstance<IFrametimeStatisticProviderOptions>(Container.Resolve<CapFrameXConfiguration>());
-			containerRegistry.ConfigureSerilogILogger(Log.Logger);
+			containerRegistry.GetContainer().ConfigureSerilogILogger(Log.Logger);
 
 			// Prism
 			containerRegistry.Register<IRegionManager, RegionManager>();
@@ -135,10 +138,11 @@ namespace CapFrameX
 			ViewModelLocationProvider.SetDefaultViewModelFactory(type => Container.Resolve(type));
 		}
 
-		private void ConfigureModuleCatalog()
+		protected override ModuleCatalog CreateModuleCatalog()
 		{
-			var moduleCatalog = CreateModuleCatalog();
+			var moduleCatalog = new ModuleCatalog();
 			moduleCatalog.AddModule(typeof(CapFrameXViewRegion));
+			return moduleCatalog;
 		}
 
 		private void LogAppInfo()

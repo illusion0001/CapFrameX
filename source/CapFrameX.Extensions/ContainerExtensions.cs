@@ -13,12 +13,12 @@ namespace CapFrameX.Extensions
 		/// </summary>
 		/// <param name="container"></param>
 		/// <param name="loggerConfiguration"></param>
-		public static void ConfigureSerilogILogger(this IContainerRegistry container, Serilog.ILogger logger)
+		public static void ConfigureSerilogILogger(this IContainer container, Serilog.ILogger logger)
 		{
 			var loggerFactory = CreateLoggerFactory(logger);
 			container.RegisterInstance(loggerFactory);
 			var loggerFactoryMethod = typeof(LoggerFactoryExtensions).GetMethod("CreateLogger", new Type[] { typeof(ILoggerFactory) });
-			container.Register(typeof(ILogger<>), () => Made.Of(req => loggerFactoryMethod.MakeGenericMethod(req.Parent.ImplementationType)));
+			container.Register(typeof(ILogger<>), made: Made.Of(req => loggerFactoryMethod.MakeGenericMethod(req.Parent.ImplementationType)));
 		}
 
 		/// <summary>
