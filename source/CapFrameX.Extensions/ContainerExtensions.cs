@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Prism.Ioc;
 using Serilog;
 using System;
+using System.Linq;
 
 namespace CapFrameX.Extensions
 {
@@ -18,7 +19,10 @@ namespace CapFrameX.Extensions
 			var loggerFactory = CreateLoggerFactory(logger);
 			container.RegisterInstance(loggerFactory);
 			var loggerFactoryMethod = typeof(LoggerFactoryExtensions).GetMethod("CreateLogger", new Type[] { typeof(ILoggerFactory) });
-			container.Register(typeof(ILogger<>), made: Made.Of(req => loggerFactoryMethod.MakeGenericMethod(req.Parent.ImplementationType)));
+			container.Register(typeof(ILogger<>), made: Made.Of(req => {
+				var t = req.ServiceType.GenericTypeArguments.First();
+				return loggerFactoryMethod.MakeGenericMethod(t);
+			}));
 		}
 
 		/// <summary>

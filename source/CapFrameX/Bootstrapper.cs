@@ -32,6 +32,8 @@ using CapFrameX.Contracts.RTSS;
 using CapFrameX.RTSSIntegration;
 using OpenHardwareMonitor.Hardware;
 using Prism.Ioc;
+using CapFrameX.ViewModel;
+using System.Linq;
 
 namespace CapFrameX
 {
@@ -39,8 +41,9 @@ namespace CapFrameX
 	{
 		protected override DependencyObject CreateShell()
 		{
-			this.Shell = Container.Resolve<Shell>();
-			InitializeShell(this.Shell);
+			var shell = Container.Resolve<Shell>();
+			Container.GetContainer().UseInstance<IShell>(shell);
+			InitializeShell(shell);
 			return this.Shell;
 		}
 
@@ -53,6 +56,7 @@ namespace CapFrameX
 				throw new ArgumentException("Shell not Implementing IShell");
             }
 
+			this.Shell = obj;
 			// get config
 			var config = Container.Resolve<CapFrameXConfiguration>();
 
@@ -72,7 +76,6 @@ namespace CapFrameX
 		protected override void RegisterTypes(IContainerRegistry containerRegistry)
 		{
 			var container = containerRegistry.GetContainer();
-			containerRegistry.RegisterInstance(typeof(IShell), this.Shell);
 			// Vertical components
 			container.Register<IEventAggregator, EventAggregator>(Reuse.Singleton, null, null, IfAlreadyRegistered.Replace, "EventAggregator");
 			container.Register<IAppConfiguration, CapFrameXConfiguration>(Reuse.Singleton);
@@ -81,7 +84,6 @@ namespace CapFrameX
 
 			// Prism
 			container.Register<IRegionManager, RegionManager>(Reuse.Singleton, null, null, IfAlreadyRegistered.Replace, "RegionManager");
-			containerRegistry.Register<IRegionManager, RegionManager>();
 
 			// Core components
 			container.Register<IRecordDirectoryObserver, RecordDirectoryObserver>(Reuse.Singleton);
@@ -106,13 +108,11 @@ namespace CapFrameX
 				filename: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"CapFrameX\Resources\Processes.json"),
 				appConfiguration: Container.Resolve<IAppConfiguration>()));
 			container.Register<SoundManager>(Reuse.Singleton);
-			containerRegistry.Register<SoundManager>();
-			Container.Resolve<IEventAggregator>().GetEvent<PubSubEvent<AppMessages.OpenLoginWindow>>().Subscribe(_ => {
+			container.Resolve<IEventAggregator>().GetEvent<PubSubEvent<AppMessages.OpenLoginWindow>>().Subscribe(_ => {
 				var window = Container.Resolve<LoginWindow>();
 				window.Show();
 			});
 			container.Register<CaptureManager>(Reuse.Singleton);
-			containerRegistry.Register<CaptureManager>();
 		}
 
 		/// <summary>
@@ -142,9 +142,9 @@ namespace CapFrameX
 			ViewModelLocationProvider.SetDefaultViewModelFactory(type => Container.Resolve(type));
 		}
 
-		protected override ModuleCatalog CreateModuleCatalog()
+		protected override IModuleCatalog CreateModuleCatalog()
 		{
-			var moduleCatalog = new ModuleCatalog();
+			var moduleCatalog = base.CreateModuleCatalog();
 			moduleCatalog.AddModule(typeof(CapFrameXViewRegion));
 			return moduleCatalog;
 		}
