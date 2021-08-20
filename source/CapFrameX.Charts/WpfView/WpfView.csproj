@@ -6,6 +6,7 @@
     <AssemblyName>LiveCharts.Wpf</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\LiveCharts.Wpf.XML</DocumentationFile>
@@ -13,7 +14,17 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <NoWarn>612,618</NoWarn>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DocumentationFile>bin\Debug\LiveCharts.Wpf.XML</DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <NoWarn>612,618</NoWarn>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DocumentationFile>bin\Debug\LiveCharts.Wpf.XML</DocumentationFile>
+    <NoWarn>612,618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <DocumentationFile>bin\Debug\LiveCharts.Wpf.XML</DocumentationFile>
     <NoWarn>612,618</NoWarn>
   </PropertyGroup>
