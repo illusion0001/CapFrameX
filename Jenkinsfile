@@ -14,7 +14,7 @@ pipeline {
             stages {
                 stage('Build Installer') {
                     stages {
-                        stage('Build') {
+                        stage('Build CX') {
                             steps {
                                 bat "msbuild source\\CapFrameX\\CapFrameX.csproj /p:Configuration=Release /p:Platform=x64 /p:DeployOnBuild=true /p:VisualStudioVersion=16.0"
                             }
@@ -22,7 +22,7 @@ pipeline {
 						
 						stage('Build HWInfo') {
 							steps {
-								bat "msbuild source\\CapFrameX.Hwinfo\\CapFrameX.Hwinfo.vcxproj /p:Configuration=Release /p:Platform=x64 /p:DeployOnBuild=true /p:VisualStudioVersion=16.0"
+								bat "msbuild source\\CapFrameX.Hwinfo\\CapFrameX.Hwinfo.vcxproj /p:SolutionDir=${pwd()}\\ /p:Configuration=Release /p:Platform=x64 /p:DeployOnBuild=true /p:VisualStudioVersion=16.0"
 							}
 						}
 
