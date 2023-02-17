@@ -259,9 +259,9 @@ namespace CapFrameX
             }
         }
 
-        public static bool IsAdministrator =>
-            new WindowsPrincipal(WindowsIdentity.GetCurrent())
-            .IsInRole(WindowsBuiltInRole.Administrator);
+    public static bool IsAdministrator => true;
+            //new WindowsPrincipal(WindowsIdentity.GetCurrent())
+            //.IsInRole(WindowsBuiltInRole.Administrator);
 
         private static void InitializeLogger()
         {

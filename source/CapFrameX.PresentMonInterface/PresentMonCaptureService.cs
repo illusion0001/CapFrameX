@@ -90,7 +90,7 @@ namespace CapFrameX.PresentMonInterface
                     }
                 };
 
-                process.Start();
+                // process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
 

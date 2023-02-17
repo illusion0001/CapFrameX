@@ -512,12 +512,12 @@ namespace CapFrameX.ViewModel
             SubscribeToAggregatorEvents();
             SetHardwareInfoDefaultsFromDatabase();
 
-            OnAutostartChanged(true);
+            //OnAutostartChanged(true);
 
-            if (AppNotificationsActive)
-            {
-                GetAppNotification();
-            }
+            //if (AppNotificationsActive)
+            //{
+            //    GetAppNotification();
+            //}
         }
 
         public void OpenLoginWindow()

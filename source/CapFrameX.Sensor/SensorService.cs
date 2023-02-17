@@ -81,26 +81,26 @@ namespace CapFrameX.Sensor
             _sensorUpdateSubject = new BehaviorSubject<TimeSpan>(CurrentSensorTimespan);
             IsLoggingActiveStream = new Subject<bool>();
 
-            Observable.FromAsync(() => StartOpenHardwareMonitor())
-               .Delay(TimeSpan.FromMilliseconds(500))
-               .Subscribe(t =>
-               {
-                   SensorServiceCompletionSource.SetResult(true);
-               });
+            //Observable.FromAsync(() => StartOpenHardwareMonitor())
+            //   .Delay(TimeSpan.FromMilliseconds(500))
+            //   .Subscribe(t =>
+            //   {
+            //       SensorServiceCompletionSource.SetResult(true);
+            //   });
 
-            SensorSnapshotStream = _sensorUpdateSubject
-               .Select(timespan => Observable.Concat(Observable.Return(-1L), Observable.Interval(timespan)))
-               .Switch()
-               .Where((_, idx) => idx == 0 || IsOverlayActive || (_isLoggingActive && UseSensorLogging) || IsSensorWebsocketActive())
-               .SelectMany(_ => GetTimeStampedSensorValues())
-               .Replay(0)
-               .RefCount();
+            //SensorSnapshotStream = _sensorUpdateSubject
+            //   .Select(timespan => Observable.Concat(Observable.Return(-1L), Observable.Interval(timespan)))
+            //   .Switch()
+            //   .Where((_, idx) => idx == 0 || IsOverlayActive || (_isLoggingActive && UseSensorLogging) || IsSensorWebsocketActive())
+            //   .SelectMany(_ => GetTimeStampedSensorValues())
+            //   .Replay(0)
+            //   .RefCount();
 
-            SensorSnapshotStream
-                .Sample(_loggingUpdateSubject.Select(timespan => Observable.Concat(Observable.Return(-1L), Observable.Interval(timespan))).Switch())
-                .Where(_ => _isLoggingActive && UseSensorLogging)
-                .SubscribeOn(Scheduler.Default)
-                .Subscribe(sensorData => LogCurrentValues(sensorData.Item2, sensorData.Item1));
+            //SensorSnapshotStream
+            //    .Sample(_loggingUpdateSubject.Select(timespan => Observable.Concat(Observable.Return(-1L), Observable.Interval(timespan))).Switch())
+            //    .Where(_ => _isLoggingActive && UseSensorLogging)
+            //    .SubscribeOn(Scheduler.Default)
+            //    .Subscribe(sensorData => LogCurrentValues(sensorData.Item2, sensorData.Item1));
 
             _logger.LogDebug("{componentName} Ready", this.GetType().Name);
 
