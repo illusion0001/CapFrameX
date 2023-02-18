@@ -27,21 +27,25 @@ namespace OpenHardwareMonitor.Hardware.IntelGPU
                                 if (deviceInfo.Pci_device_id != 0 &&
                                   deviceInfo.Pci_vendor_id == IGCL.Intel_VENDOR_ID)
                                 {
-                                    var igclTelemetryData = new IgclTelemetryData();
-                                    if (IGCL.GetIgclTelemetryData((uint)index, ref igclTelemetryData))
+                                    // Filter integrated graphics
+                                    if (deviceInfo.DeviceName != "Intel(R) UHD Graphics")
                                     {
-                                        hardware.Add(new IntelGPU(
-                                              deviceInfo.DeviceName,
-                                              index,
-                                              deviceInfo.AdapterID,
-                                              (int)deviceInfo.Pci_device_id,
-                                              (int)IGCL.GetBusWidth((uint)index),
-                                              deviceInfo.DriverVersion,
-                                              settings,
-                                              sensorConfig,
-                                              processService));
+                                        var igclTelemetryData = new IgclTelemetryData();
+                                        if (IGCL.GetIgclTelemetryData((uint)index, ref igclTelemetryData))
+                                        {
+                                            hardware.Add(new IntelGPU(
+                                                  deviceInfo.DeviceName,
+                                                  index,
+                                                  deviceInfo.AdapterID,
+                                                  (int)deviceInfo.Pci_device_id,
+                                                  (int)IGCL.GetBusWidth((uint)index),
+                                                  deviceInfo.DriverVersion,
+                                                  settings,
+                                                  sensorConfig,
+                                                  processService));
 
-                                        Log.Logger.Information($"Intialized Intel GPU device: {deviceInfo.DeviceName}");
+                                            Log.Logger.Information($"Intel graphics card detected:: {deviceInfo.DeviceName}");
+                                        }
                                     }
                                 }
                             }
@@ -50,7 +54,8 @@ namespace OpenHardwareMonitor.Hardware.IntelGPU
                 }
             }
             catch (DllNotFoundException ex) { Log.Logger.Error(ex, $"Error while loading CapFrameX.IGCL.dll."); }
-            catch (Exception ex) { Log.Logger.Error(ex, $"Error while getting Intel GPU device info."); }
+			catch (AccessViolationException ex) { Log.Logger.Error(ex, $"Access violation exception while accessing Intel GPU lib."); }
+			catch (Exception ex) { Log.Logger.Error(ex, $"Error while getting Intel GPU device info."); }
         }
 
         public IHardware[] Hardware => hardware.ToArray();
@@ -64,8 +69,13 @@ namespace OpenHardwareMonitor.Hardware.IntelGPU
 
             if (IGCL.IsInitialized)
             {
-                IGCL.CloseIntelGpuLib();
-            }
+                try
+                {
+                    IGCL.CloseIntelGpuLib();
+                }
+				catch (AccessViolationException ex) { Log.Logger.Error(ex, $"Access violation exception while closing Intel GPU lib."); }
+				catch (Exception ex) { Log.Logger.Error(ex, $"Error while closing Intel GPU lib."); }
+			}
         }
     }
 }

@@ -36,7 +36,7 @@
         <materialDesign:ColorZone Mode="PrimaryMid" Foreground="White" Background="{DynamicResource MaterialDesignToolBackground}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="2">
@@ -84,7 +84,7 @@
                              Content="CLOUD" />
 				</StackPanel>
 
-                <materialDesign:PopupBox Grid.Column="1" Margin="0 0 260 0" DataContext="{Binding Path=DataContext, ElementName=ColorbarViewName}"
+                <materialDesign:PopupBox Grid.Column="1" Margin="0 0 235 0" DataContext="{Binding Path=DataContext, ElementName=ColorbarViewName}"
                                          RequestBringIntoView="PopupBox_RequestBringIntoView" StaysOpen="False" 
                                          PlacementMode="BottomAndAlignRightEdges" HorizontalAlignment="Right" x:Name="ScreenshotPopupBox">
                     <materialDesign:PopupBox.ToggleContent>
@@ -116,7 +116,7 @@
                 </materialDesign:PopupBox>
 
                 <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                            Margin="0 0 210 0"
+                            Margin="0 0 190 0"
 						    ToolTip="Login"
                             HorizontalAlignment="Right"
 						    materialDesign:RippleAssist.Feedback="#DD000000"
@@ -127,7 +127,7 @@
 				</Button>
                 
 				<Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                            Margin="0 0 210 0"
+                            Margin="0 0 190 0"
 						    ToolTip="Logout"
                             HorizontalAlignment="Right"
 						    materialDesign:RippleAssist.Feedback="#DD000000"
@@ -137,7 +137,7 @@
                     <materialDesign:PackIcon Kind="Logout" Foreground="DarkRed"/>
 				</Button>
 
-				<TextBlock Grid.Column="1" Margin="0 0 70 2" HorizontalAlignment="Right" VerticalAlignment="Center">           
+				<TextBlock Grid.Column="1" Margin="0 0 60 2" HorizontalAlignment="Right" VerticalAlignment="Center">           
 			        <Hyperlink NavigateUri="https://capframex.com/" RequestNavigate="Hyperlink_RequestNavigate" TextDecorations="None">
 				        <TextBlock FontSize="16" Text="CapFrameX.com" Foreground="White"/>
 			        </Hyperlink>	
@@ -244,7 +244,7 @@
                                             <CheckBox IsChecked="{Binding UseTBPSim, Mode=TwoWay}" ToolTipService.ShowDuration="25000">
                                                 <CheckBox.ToolTip>
                                                     <ToolTip MaxWidth="400">
-                                                        <TextBlock TextWrapping="Wrap" Text="If sensor data of a record contains &quot;TBP Sim&quot; values (RDNA GPUs only), use these for analysis like FPS/W instead of &quot;GPU Total&quot;
+                                                        <TextBlock TextWrapping="Wrap" Text="If sensor data of a record contains &quot;TBP Sim&quot; values (RDNA + Intel Arc GPUs only), use these for analysis like FPS/W instead of &quot;GPU Total&quot;
                                                                    &#10;For changes to take effect the analysis and comparison pages have to be reloaded and already inserted records on report page need to be added again"></TextBlock>
                                                     </ToolTip>
                                                     </CheckBox.ToolTip>
@@ -339,6 +339,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -361,6 +362,18 @@
                                             <TextBlock Margin="0 0 0 0" Text="Start minimized" TextAlignment="Left" TextWrapping="Wrap" Width="80"/>
                                             <CheckBox Margin="0 0 0 0" IsChecked="{Binding StartMinimized, Mode=TwoWay}">
                                             </CheckBox>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0 5 0 5" >
+                                            <TextBox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="15 5 0 5" PreviewKeyDown="TextBox_KeyEnterUpdate" Width="215" IsReadOnly="False"
+                                                  materialDesign:HintAssist.Hint="Ping URL" ToolTip="URL to use for the network ping overlay entry">
+                                                <TextBox.Text>
+                                                    <Binding Path="DataContext.PingURL"
+														 ElementName="ColorbarViewName"
+														 Mode="TwoWay"
+														 UpdateSourceTrigger="LostFocus">
+                                                    </Binding>
+                                                </TextBox.Text>
+                                            </TextBox>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>

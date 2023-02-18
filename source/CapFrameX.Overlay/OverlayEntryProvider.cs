@@ -17,9 +17,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace CapFrameX.Overlay
@@ -34,7 +36,7 @@ namespace CapFrameX.Overlay
         {
             "OnlineAverage", "OnlineP1", "OnlineP0dot2", "OnlineApplicationLatency",
             "OnlineStutteringPercentage", "PmdGpuPowerCurrent", "PmdCpuPowerCurrent",
-            "PmdSystemPowerCurrent"
+            "PmdSystemPowerCurrent", "Ping"
         };
 
         private readonly ISensorService _sensorService;
@@ -55,6 +57,7 @@ namespace CapFrameX.Overlay
         private readonly ConcurrentDictionary<int, int> _sizeIndexDictionary
             = new ConcurrentDictionary<int, int>();
         private BlockingCollection<IOverlayEntry> _overlayEntries;
+        private double _ping = double.NaN;
 
         public bool HasHardwareChanged { get; set; }
         public bool ShowSystemTimeSeconds { get; set; }
@@ -593,20 +596,27 @@ namespace CapFrameX.Overlay
                 stutteringPercentage.Value = Math.Round(_onlineMetricService.GetOnlineStutteringPercentageValue(), 1);
             }
 
+            // ping
+            _identifierOverlayEntryDict.TryGetValue("Ping", out IOverlayEntry ping);
+
+            if (ping != null && ping.ShowOnOverlay)
+            {
+                ping.Value = Math.Round(_ping, 0);
+                Ping_Click();
+
+            }
+
             // PMD metrics
             _identifierOverlayEntryDict.TryGetValue("PmdGpuPowerCurrent", out IOverlayEntry pmdGpuPowerCurrent);
             _identifierOverlayEntryDict.TryGetValue("PmdCpuPowerCurrent", out IOverlayEntry pmdcpuPowerCurrent);
             _identifierOverlayEntryDict.TryGetValue("PmdSystemPowerCurrent", out IOverlayEntry pmdSystemPowerCurrent);
 
-            OnlinePmdMetrics pmdMetrics = null;
-
-            if (pmdGpuPowerCurrent.ShowOnOverlay
-                || pmdcpuPowerCurrent.ShowOnOverlay
-                || pmdSystemPowerCurrent.ShowOnOverlay)
+			if ((pmdGpuPowerCurrent != null && pmdGpuPowerCurrent.ShowOnOverlay)
+				|| (pmdcpuPowerCurrent != null && pmdcpuPowerCurrent.ShowOnOverlay)
+				|| (pmdSystemPowerCurrent != null && pmdSystemPowerCurrent.ShowOnOverlay))
             {
-                pmdMetrics = _onlineMetricService.GetPmdMetricsPowerCurrent();
-
-                if (pmdMetrics != null)
+				OnlinePmdMetrics pmdMetrics = _onlineMetricService.GetPmdMetricsPowerCurrent();
+				if (pmdMetrics != null)
                 {
                     if (pmdGpuPowerCurrent != null && pmdGpuPowerCurrent.ShowOnOverlay)
                     {
@@ -695,6 +705,15 @@ namespace CapFrameX.Overlay
             {
                 stutteringPercentage.ValueUnitFormat = "%";
                 stutteringPercentage.ValueAlignmentAndDigits = "{0,5:F1}";
+            }
+
+            // ping
+            _identifierOverlayEntryDict.TryGetValue("Ping", out IOverlayEntry ping);
+
+            if (ping != null)
+            {
+                ping.ValueUnitFormat = "ms";
+                ping.ValueAlignmentAndDigits = "{0,5:F0}";
             }
 
             // PMD
@@ -1012,6 +1031,30 @@ namespace CapFrameX.Overlay
                 {
                     CheckCustomSystemInfo();
                 });
+        }
+
+        private async void Ping_Click()
+        {
+            Ping pingSender = new Ping();
+            try 
+            {
+                await Task.Run(() =>
+                {
+                    PingReply reply = pingSender.Send(_appConfiguration.PingURL);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        _ping = Convert.ToDouble(reply.RoundtripTime);
+                    }
+                    else
+                    {
+                        _ping = double.NaN;
+                    }
+                });
+            } 
+            catch
+            {
+                _ping = double.NaN;
+            };
         }
     }
 }

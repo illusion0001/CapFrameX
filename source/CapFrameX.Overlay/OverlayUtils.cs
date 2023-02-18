@@ -60,7 +60,7 @@ namespace CapFrameX.Overlay
                     {
                         OverlayEntryType = EOverlayEntryType.CX,
                         ShowOnOverlay = false,
-                        ShowOnOverlayIsEnabled = false,
+                        ShowOnOverlayIsEnabled = true,
                         Description = "Run history",
                         GroupName = string.Empty,
                         Value = default,
@@ -341,6 +341,19 @@ namespace CapFrameX.Overlay
                         ShowOnOverlayIsEnabled = true,
                         Description = "Battery Life Remaining (min)",
                         GroupName = "Battery Life",
+                        Value = "0",
+                        ValueFormat = default,
+                        ShowGraph = false,
+                        ShowGraphIsEnabled = false,
+                        Color = string.Empty
+                    },
+                    new OverlayEntryWrapper("Ping")
+                    {
+                        OverlayEntryType = EOverlayEntryType.CX,
+                        ShowOnOverlay = false,
+                        ShowOnOverlayIsEnabled = true,
+                        Description = "Network Ping",
+                        GroupName = "Ping",
                         Value = "0",
                         ValueFormat = default,
                         ShowGraph = false,
