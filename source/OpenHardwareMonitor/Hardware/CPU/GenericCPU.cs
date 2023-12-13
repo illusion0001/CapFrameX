@@ -43,13 +43,14 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         private const uint CPUID_CORE_MASK_STATUS = 0x1A;
 
-        private bool IsBigLittleDesign()
+        private bool IsHybridDesign()
         {
             // Alder Lake (Intel 7/10nm): 0x97, 0x9A
             // Raptor Lake (Intel 7/10nm): 0xB7
             // Zen 5 (3nm)?
+            // Meteor Lake (Intel 4/7nm: 0xAA
             return vendor == Vendor.Intel && family == 0x06
-                && (model == 0x97 || model == 0x9A || model == 0xB7);
+                && (model == 0x97 || model == 0x9A || model == 0xB7 || model == 0xAA);
         }
 
         protected string CoreString(int i)
@@ -67,7 +68,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             string corelabel = string.Empty;
 
-            if (IsBigLittleDesign())
+            if (IsHybridDesign())
             {
                 var previousAffinity = ThreadAffinity.Set(cpuid[i][0].Affinity);
                 if (Opcode.Cpuid(CPUID_CORE_MASK_STATUS, 0, out uint eax, out uint ebx, out uint ecx, out uint edx))
