@@ -1,0 +1,91 @@
+name: Build CapFrameX
+
+on: [ push,  pull_request, workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      SOLUTION_FILE: ./CapFrameX.sln
+      BUILD_CONFIG: x64
+      BUILD_TYPE: Release
+      PM_PATH: source\CapFrameX.PresentMonInterface\PresentMon
+      PM_ZIP: ${{ github.workspace}}\PresentMon-1.10.0.zip
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+    - name: Checkout PresentMon
+      uses: actions/checkout@main
+      with:
+        repository: GameTechDev/PresentMon
+        path: ${{ env.PM_PATH }}
+        ref: v1.10.0
+    - name: Install FrameViewSDK
+      working-directory: installers
+      # The installer `/s` doesn't work, let's be creative
+      run: 7z x FVSDKSetup.exe "-oC:\Program Files\NVIDIA Corporation\"
+    - name: Setup variables
+      run: |
+        $fileContent = Get-Content -Path "source\CapFrameX\Properties\AssemblyInfo.cs"
+        $pattern = '\[assembly: AssemblyVersion\("([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)"\)\]'
+        $appVersion = $null
+        foreach ($line in $fileContent)
+        {
+            if ($line -match $pattern)
+            {
+                $appVersion = $matches[1]
+                echo $appVersion
+                break
+            }
+        }
+        
+        $_ver = "$(git rev-list HEAD --count)-$(git rev-parse --short=8 HEAD)"
+        $_name = "$(Split-Path -Path $pwd -Leaf)-$appVersion-$_ver"
+        echo "commit_ver=$_name" >> "$Env:GITHUB_ENV"
+        echo "arc_name=$_name.zip" >> "$Env:GITHUB_ENV"
+        echo "arc_path=${{ github.workspace }}\$_name.zip" >> "$Env:GITHUB_ENV"
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@main
+      with:
+        msbuild-architecture: x64
+    # build from source so we can get matching pdb
+    - name: Build PresentMon
+      working-directory: ${{ env.PM_PATH }}
+      run: |
+        msbuild /m /p:Configuration="${{ env.BUILD_TYPE }}" /p:Platform="${{ env.BUILD_CONFIG }}" PresentMon\PresentMon.vcxproj
+        mv build/${{ env.BUILD_TYPE }}/* .
+    - name: Nuget restore
+      run: nuget restore ${{ env.SOLUTION_FILE }}
+    - name: Build CapFrameX
+      run: msbuild /m /p:Configuration="${{ env.BUILD_TYPE }}" /p:Platform="${{ env.BUILD_CONFIG }}" -maxcpucount:1 "${{ env.SOLUTION_FILE }}"
+    - name: Zip CapFrameX
+      if: github.event_name == 'workflow_dispatch'
+      working-directory: source/CapFrameX/bin/${{ env.BUILD_CONFIG }}
+      run: |
+        Rename-Item -path "${{ env.BUILD_TYPE }}" -NewName ${{ env.commit_ver }}
+        $compress = @{
+          Path = "${{ env.commit_ver }}"
+          CompressionLevel = "Optimal"
+          DestinationPath = "${{ env.arc_path }}"
+        }
+        Compress-Archive @compress
+    - name: Zip PresentMon
+      if: github.event_name == 'workflow_dispatch'
+      working-directory: ${{ env.PM_PATH }}
+      run: |
+        $compress = @{
+          Path = "*.exe", "*.pdb"
+          CompressionLevel = "Optimal"
+          DestinationPath = "${{ env.PM_ZIP }}"
+        }
+        Compress-Archive @compress
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release create "${{ env.commit_ver }}" "${{ env.arc_path }}" "${{ env.PM_ZIP }}" --target ${{ GITHUB.SHA }} --title "${{ env.commit_ver }}" || Write-Output "::warning::Upload failed but build completed."; true
+
