@@ -29,8 +29,19 @@ jobs:
       run: 7z x FVSDKSetup.exe "-oC:\Program Files\NVIDIA Corporation\"
     - name: Setup variables
       run: |
+        $fileContent = Get-Content -Path "source\CapFrameX\Properties\AssemblyInfo.cs"
+        $pattern = '\[assembly: AssemblyVersion\("([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)"\)\]'
+        $appVersion = $null
+        foreach ($line in $fileContent) {
+            if ($line -match $pattern) {
+                $appVersion = $matches[1]
+                echo $appVersion
+                break
+            }
+        }
+        
         $_ver = "$(git rev-list HEAD --count)-$(git rev-parse --short=8 HEAD)"
-        $_name = "$(Split-Path -Path $pwd -Leaf)-$_ver"
+        $_name = "$(Split-Path -Path $pwd -Leaf)-$appVersion-$_ver"
         echo "commit_ver=$_name" >> "$Env:GITHUB_ENV"
         echo "arc_name=$_name.zip" >> "$Env:GITHUB_ENV"
         echo "arc_path=${{ github.workspace }}\$_name.zip" >> "$Env:GITHUB_ENV"
