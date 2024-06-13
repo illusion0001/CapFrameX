@@ -22,6 +22,8 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Serialization;
 
 namespace CapFrameX.Data
 {
@@ -205,7 +207,17 @@ namespace CapFrameX.Data
 
 			_captureData = new List<string[]>();
 
-			_overlayService.SetCaptureServiceStatus("Recording frametimes");
+			string customProfileFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"CapFrameX\Profile.txt");
+			if (File.Exists(customProfileFilePath))
+			{
+				string[] lines = File.ReadAllLines(customProfileFilePath);
+				string DataLine = $"{(lines.Length > 0 ? lines[0] : "")}";
+				_overlayService.SetCaptureServiceStatus($"Recording profile ({DataLine})");
+			}
+			else
+			{
+				_overlayService.SetCaptureServiceStatus("Recording frametimes");
+			}
 
 			if (options.Remote)
 				_captureStatusChange.OnNext(new CaptureStatus() { Status = ECaptureStatus.StartedRemote });
