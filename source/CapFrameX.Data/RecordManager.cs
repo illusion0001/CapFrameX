@@ -432,7 +432,7 @@ namespace CapFrameX.Data
         {
             try
             {
-                var filePath = await GetOutputFilename(process, recordDirectory);
+                var filePath = await GetOutputFilename(process, recordDirectory, _systemInfo.GetProcessorName(), _systemInfo.GetGraphicCardName());
                 lines = new string[] { IGNOREFLAGMARKER, COLUMN_HEADER }.Concat(lines);
                 File.WriteAllLines(filePath + ".csv", lines);
             }
@@ -444,7 +444,7 @@ namespace CapFrameX.Data
 
         public async Task<bool> SaveSessionRunsToFile(IEnumerable<ISessionRun> runs, string processName, string comment, string recordDirectory = null, List<ISessionInfo> HWInfo = null)
         {
-            var filePath = await GetOutputFilename(processName, recordDirectory);
+            var filePath = await GetOutputFilename(processName, recordDirectory, _systemInfo.GetProcessorName(), _systemInfo.GetGraphicCardName());
 
             try
             {
@@ -694,7 +694,7 @@ namespace CapFrameX.Data
                 clone.Info.Id = Guid.NewGuid();
                 NormalizeStartTimesOfSessionRuns(clone.Runs);
                 clone.Info.Comment = $"(Cut) {clone.Info.Comment}";
-                var filePath = await GetOutputFilename(clone.Info.ProcessName.StripExeExtension(), null);
+                var filePath = await GetOutputFilename(clone.Info.ProcessName.StripExeExtension(), null, null, null);
                 SaveSessionToFile(filePath, clone);
             }
             catch (Exception e)
@@ -726,9 +726,9 @@ namespace CapFrameX.Data
             return _processList.FindProcessByName(processName)?.DisplayName ?? processName.Replace(".exe", string.Empty);
         }
 
-        private async Task<string> GetOutputFilename(string processName, string recordDirectory)
+        private async Task<string> GetOutputFilename(string processName, string recordDirectory, string cpuName, string gpuName)
         {
-            var filename = CaptureServiceConfiguration.GetCaptureFilename(processName);
+            var filename = CaptureServiceConfiguration.GetCaptureFilename(processName, cpuName, gpuName);
             var directory = recordDirectory is null ? await _recordObserver.ObservingDirectoryStream.Take(1) : new DirectoryInfo(recordDirectory);
             return System.IO.Path.Combine(directory.FullName, filename);
         }
