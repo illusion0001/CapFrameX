@@ -23,11 +23,18 @@ namespace CapFrameX.PresentMonInterface
             return startInfo;
         }
 
-        public static string GetCaptureFilename(string processName)
+        public static string GetCaptureFilename(string processName, string cpuName, string gpuName)
         {
             DateTime now = DateTime.Now;
-            string dateTimeFormat = $"{now.Year}-{now.Month:d2}-" +
-                $"{now.Day:d2}T{now.Hour}{now.Minute}{now.Second}";
+            string dateTimeFormat = $"{now.Year}-{now.Month:d2}-{now.Day:d2}T{now.Hour}{now.Minute}{now.Second}";
+            string customProfileFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                                        @"CapFrameX\Profile.txt");
+            if (File.Exists(customProfileFilePath) && cpuName != null && gpuName != null)
+            {
+                string[] lines = File.ReadAllLines(customProfileFilePath);
+                string DataLine = $"{(lines.Length > 0 ? lines[0].Replace(" ", "-") : "")}";
+                return $"{cpuName}-{gpuName}-{DataLine}-CapFrameX-{processName}.exe-{dateTimeFormat}.json";
+            }
             return $"CapFrameX-{processName}.exe-{dateTimeFormat}.json";
         }
     }
