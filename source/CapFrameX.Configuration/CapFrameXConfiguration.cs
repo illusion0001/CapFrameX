@@ -236,7 +236,7 @@ namespace CapFrameX.Configuration
 
         public double CaptureTime
         {
-            get => Get<double>(20d);
+            get => Get<double>(0d);
             set => Set(value);
         }
 
@@ -272,7 +272,7 @@ namespace CapFrameX.Configuration
 
         public string CaptureFileMode
         {
-            get => Get<string>("Json");
+            get => Get<string>("JsonCsv");
             set => Set(value);
         }
 
@@ -506,7 +506,7 @@ namespace CapFrameX.Configuration
 
 		public bool AutoDisableOverlay
 		{
-			get => Get<bool>(true);
+			get => Get<bool>(false);
 			set => Set(value);
 		}
 
