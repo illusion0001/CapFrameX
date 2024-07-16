@@ -1810,6 +1810,12 @@
     "IsBlacklisted": false
   },
   {
+    "Name": "VSCodium",
+    "DisplayName": null,
+    "IsBlacklisted": true,
+    "LastCaptureTime": null
+  },
+  {
     "Name": "vs_installershell",
     "DisplayName": null,
     "IsBlacklisted": true
@@ -3148,6 +3154,12 @@
     "Name": "GRW",
     "DisplayName": "Ghost Recon Wildlands",
     "IsBlacklisted": false
+  },
+  {
+    "Name": "GitHubDesktop",
+    "DisplayName": null,
+    "IsBlacklisted": true,
+    "LastCaptureTime": null
   },
   {
     "Name": "farcry3",
