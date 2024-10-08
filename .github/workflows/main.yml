@@ -12,7 +12,7 @@ jobs:
       BUILD_CONFIG: x64
       BUILD_TYPE: Release
       PM_PATH: source\CapFrameX.PresentMonInterface\PresentMon
-      PM_ZIP: ${{ github.workspace}}\PresentMon-1.10.0.zip
+      PM_ZIP: ${{ github.workspace}}\PresentMon-2.2.0.zip
     steps:
     - name: Checkout
       uses: actions/checkout@main
@@ -23,7 +23,7 @@ jobs:
       with:
         repository: GameTechDev/PresentMon
         path: ${{ env.PM_PATH }}
-        ref: v1.10.0
+        ref: v2.2.0
     - name: Install FrameViewSDK
       working-directory: installers
       # The installer `/s` doesn't work, let's be creative
