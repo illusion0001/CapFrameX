@@ -24,10 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.MVVM", "source\Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.Contracts", "source\CapFrameX.Contracts\CapFrameX.Contracts.csproj", "{4C3B8B5C-54D7-46A1-91A1-32BF82FD42CD}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CapFrameXInstaller", "source\CapFrameXInstaller\CapFrameXInstaller.wixproj", "{77416B78-A34F-4CFC-9562-A2599D054C8F}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CapFrameXBootstrapper", "source\CapFrameXBootstrapper\CapFrameXBootstrapper.wixproj", "{9E2FAB6F-117C-495A-A47B-52A15B9E9806}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.PresentMonInterface", "source\CapFrameX.PresentMonInterface\CapFrameX.PresentMonInterface.csproj", "{ADFBAECE-B74F-4A80-87D1-84BC990527B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.Overlay", "source\CapFrameX.Overlay\CapFrameX.Overlay.csproj", "{624777C2-6AF6-46D5-A019-1285F699B8A7}"
@@ -72,8 +68,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CapFrameX.Statistics.PlotBuilder", "source\CapFrameX.Statistics.PlotBuilder\CapFrameX.Statistics.PlotBuilder.csproj", "{80A26F08-6AE5-472D-BB13-B6FB9A37FDCB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.RTSSIntegration", "source\CapFrameX.RTSSIntegration\CapFrameX.RTSSIntegration.csproj", "{AE3BDF42-2F21-4CC3-9171-6CF2FDFDAB7A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.CustomInstallerActions", "source\CapFrameX.CustomInstallerActions\CapFrameX.CustomInstallerActions.csproj", "{D26EA74F-8D44-453C-AD70-3789AFFDF85F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapFrameX.Remote", "source\CapFrameX.ApiInterface\CapFrameX.Remote.csproj", "{A692A512-627A-4896-9D2D-4412FDD8C78C}"
 EndProject
@@ -213,18 +207,6 @@ Global
 		{4C3B8B5C-54D7-46A1-91A1-32BF82FD42CD}.Release|x64.Build.0 = Release|x64
 		{4C3B8B5C-54D7-46A1-91A1-32BF82FD42CD}.Release|x86.ActiveCfg = Release|x86
 		{4C3B8B5C-54D7-46A1-91A1-32BF82FD42CD}.Release|x86.Build.0 = Release|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Debug|x64.ActiveCfg = Debug|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Debug|x86.ActiveCfg = Debug|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Release|Any CPU.ActiveCfg = Release|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Release|x64.ActiveCfg = Release|x86
-		{77416B78-A34F-4CFC-9562-A2599D054C8F}.Release|x86.ActiveCfg = Release|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Debug|x64.ActiveCfg = Debug|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Debug|x86.ActiveCfg = Debug|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Release|Any CPU.ActiveCfg = Release|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Release|x64.ActiveCfg = Release|x86
-		{9E2FAB6F-117C-495A-A47B-52A15B9E9806}.Release|x86.ActiveCfg = Release|x86
 		{ADFBAECE-B74F-4A80-87D1-84BC990527B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ADFBAECE-B74F-4A80-87D1-84BC990527B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADFBAECE-B74F-4A80-87D1-84BC990527B0}.Debug|x64.ActiveCfg = Debug|x64
@@ -451,15 +433,6 @@ Global
 		{AE3BDF42-2F21-4CC3-9171-6CF2FDFDAB7A}.Release|x64.Build.0 = Release|x64
 		{AE3BDF42-2F21-4CC3-9171-6CF2FDFDAB7A}.Release|x86.ActiveCfg = Release|x86
 		{AE3BDF42-2F21-4CC3-9171-6CF2FDFDAB7A}.Release|x86.Build.0 = Release|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Debug|x64.ActiveCfg = Debug|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Debug|x86.ActiveCfg = Debug|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Debug|x86.Build.0 = Debug|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Release|Any CPU.ActiveCfg = Release|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Release|x64.ActiveCfg = Release|x64
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Release|x64.Build.0 = Release|x64
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Release|x86.ActiveCfg = Release|x86
-		{D26EA74F-8D44-453C-AD70-3789AFFDF85F}.Release|x86.Build.0 = Release|x86
 		{A692A512-627A-4896-9D2D-4412FDD8C78C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A692A512-627A-4896-9D2D-4412FDD8C78C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A692A512-627A-4896-9D2D-4412FDD8C78C}.Debug|x64.ActiveCfg = Debug|x64
