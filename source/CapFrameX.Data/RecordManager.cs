@@ -594,7 +594,8 @@ namespace CapFrameX.Data
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating {filePath}", filePath);
+                string msg = $"Error while creating {filePath} Exceptions InnerException: {ex.InnerException} Source: {ex.Source} Message: {ex.Message} HResult: {ex.HResult} StackTrace: {ex.StackTrace} TargetSite: {ex.TargetSite}";
+                _logger.LogError(ex, msg);
                 return false;
             }
         }
