@@ -63,7 +63,6 @@ jobs:
     - name: Build CapFrameX
       run: msbuild /m /p:Configuration="${{ env.BUILD_TYPE }}" /p:Platform="${{ env.BUILD_CONFIG }}" -maxcpucount:1 "${{ env.SOLUTION_FILE }}"
     - name: Zip CapFrameX
-      if: github.event_name == 'workflow_dispatch'
       working-directory: source/CapFrameX/bin/${{ env.BUILD_CONFIG }}
       run: |
         Rename-Item -path "${{ env.BUILD_TYPE }}" -NewName ${{ env.commit_ver }}
@@ -74,7 +73,6 @@ jobs:
         }
         Compress-Archive @compress
     - name: Zip PresentMon
-      if: github.event_name == 'workflow_dispatch'
       working-directory: ${{ env.PM_PATH }}
       run: |
         $compress = @{
@@ -83,9 +81,18 @@ jobs:
           DestinationPath = "${{ env.PM_ZIP }}"
         }
         Compress-Archive @compress
+    - name: Set release type
+      run: |
+        if ("${{ github.event_name }}" -ieq "workflow_dispatch")
+        {
+            echo "release=" >> "$Env:GITHUB_ENV"
+        }
+        else
+        {
+            echo "release= -p" >> "$Env:GITHUB_ENV"
+        }
     - name: Create Release
-      if: github.event_name == 'workflow_dispatch'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create "${{ env.commit_ver }}" "${{ env.arc_path }}" "${{ env.PM_ZIP }}" --target ${{ GITHUB.SHA }} --title "${{ env.commit_ver }}" || Write-Output "::warning::Upload failed but build completed."; true
+      run: gh release create "${{ env.commit_ver }}" "${{ env.arc_path }}" "${{ env.PM_ZIP }}" --target ${{ GITHUB.SHA }} --title "${{ env.commit_ver }}"${{ env.release }} || Write-Output "::warning::Upload failed but build completed."; true
 
