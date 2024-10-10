@@ -94,5 +94,7 @@ jobs:
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create "${{ env.commit_ver }}" "${{ env.arc_path }}" "${{ env.PM_ZIP }}" --target ${{ GITHUB.SHA }} --title "${{ env.commit_ver }}"${{ env.release }} || Write-Output "::warning::Upload failed but build completed."; true
+      run: |
+        gh release delete "${{ env.commit_ver }}" --cleanup-tag --yes || true
+        gh release create "${{ env.commit_ver }}" "${{ env.arc_path }}" "${{ env.PM_ZIP }}" --target ${{ GITHUB.SHA }} --title "${{ env.commit_ver }}"${{ env.release }} || Write-Output "::warning::Upload failed but build completed."; true
 
